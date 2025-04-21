@@ -1,0 +1,25 @@
+SL.,Food Item,Category,Type,Price
+1,Cheese Burger,Burger,Either,180
+2,Veg Burger,Burger,Veg,200
+3,Chicken Burger,Burger,Non-Veg,230
+4,Double Chicken Burger,Burger,Non-Veg,250
+5,Fish Fillet Burger,Burger,Non-Veg,275
+6,Giant Burger,Burger,Either,300
+7,French Fries,Side-Dish,Veg,90
+8,Peri Peri Fries,Side-Dish,Veg,100
+9,Potato Wedges,Side-Dish,Veg,100
+10,Chicken Nuggets,Side-Dish,Non-Veg,130
+11,Coca-Cola,Beverage,Veg,110
+12,Sprite,Beverage,Veg,110
+13,Fanta,Beverage,Veg,110
+14,Vanilla Milkshake,Treats,Veg,240
+15,Chocolate Milkshake,Treats,Veg,240
+16,Strawberry Milkshake,Treats,Veg,240
+17,Oreo Milkshake,Treats,Veg,270
+18,Softie,Treats,Veg,190
+19,BBQ Sauce,Extra,Veg,10
+20,Creamy Ranch Sauce,Extra,Veg,10
+21,Sweet & Sour,Extra,Veg,10
+22,Mayonnaise,Extra,Veg,10
+23,Ketchup,Extra,Veg,10
+24,Mustard,Extra,Veg,10

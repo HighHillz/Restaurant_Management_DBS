@@ -14,6 +14,7 @@ A python script that simulates an online selecting and ordering options at a res
 
 ### Libraries
 - tkinter
+- customtkinter
 - mysql
 
 ## Usage

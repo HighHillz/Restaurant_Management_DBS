@@ -16,6 +16,7 @@ A python script that simulates an online selecting and ordering options at a res
 - tkinter
 - customtkinter
 - mysql
+- csv
 
 ## Usage
 The project can be useful for restaurants where customer to worker ratio is not sufficient. This online driven menu does not require workers to take orders and reduces waiting time of customers.

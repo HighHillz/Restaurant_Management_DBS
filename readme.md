@@ -21,10 +21,11 @@ A python script that simulates an online selecting and ordering options at a res
 ## Usage
 The project can be useful for restaurants where customer to worker ratio is not sufficient. This online driven menu does not require workers to take orders and reduces waiting time of customers.
 
+## Updates
+- Order ID: Record the ID to deliver food to the right person!
+
 ## Future Enhancements
-- Add order ID.
-- Add Light/Dark mode.
-- Meal Suggestions.
+Nothing here for now :/
 
 ## Version
-1
+1.1

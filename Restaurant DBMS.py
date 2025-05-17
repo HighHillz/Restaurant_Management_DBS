@@ -1,8 +1,18 @@
+#------- IMPORT -------#
+
+
+
 import tkinter as tk 
 from tkinter import messagebox
 import customtkinter as ctk
 import mysql.connector as conn
 import csv
+
+
+
+#------- MAIN SCREEN -------#
+
+
 
 def welcome_page():
     """Display the welcome page with two buttons: Admin and Customer."""
@@ -39,6 +49,12 @@ def welcome_page():
     )
     customer_but.pack(pady=10)
 
+
+
+#------- CUSTOMER GUI & DISPLAY --------#
+
+
+
 def list_category():
     """List all available categories for selecting on the customer home page."""
     global cat_but
@@ -47,7 +63,7 @@ def list_category():
     for widget in window.winfo_children():
         widget.destroy()
         
-    #Cart button
+    #Order button
     order_but = tk.Button(
         window, text="Show Order", cursor="hand2", foreground="black", bg="#ffef00",
         font=("Consolas", 12), command=lambda: open_order(), activebackground="black", activeforeground="#E8E8E8"
@@ -148,6 +164,7 @@ def open_popup(item_name):
     top.config(bg="#222222")
     top.grab_set()
     top.resizable(0,0)
+    top.title("Quantity")
 
     tk.Label(top, text="Please enter the quantity", font=("Consolas", 12), fg="#E8E8E8", bg="#222222").pack(pady=20)
     tk.Message(top, width=300, text=f"Food item: {item_name}", font=("Consolas", 10), fg="#E8E8E8", bg="#222222").pack()
@@ -202,11 +219,12 @@ def open_order():
 
     def complete_payment(payPage):
         """Complete payment, clear order, and reset money."""
-        global money
+        global money, order_id
         for i in rows:
-            mycursor.execute("Insert into logtable values('{}', {}, {},NOW())".format(i[0], i[1], i[3]))
+            mycursor.execute("Insert into logtable values({}, '{}', {}, {},NOW())".format(order_id, i[0], i[1], i[3]))
         mycursor.execute("delete from orders")
         money = 0     # Reset the money variable
+        order_id += 1
         payPage.destroy()  # Close the payment page
         order_window.destroy()  # Close the order window
         list_category() # Goes back to menu for the next user
@@ -295,6 +313,12 @@ def open_order():
         window, cursor="hand2", text="Purchase", command=lambda: pay_money(),
         bg="green", fg="white", font=("Consolas", 12), activebackground="black", activeforeground="#E8E8E8"
     ).place(x=window_width-320, y=window_height-50)
+
+
+
+#------- ADMIN GUI & DISPLAY -------#
+
+
 
 def admin_page():
     """Display Admin login page with username and password fields."""
@@ -618,11 +642,11 @@ def view_purchase_log():
 
     tk.Label(window, text="Purchase Log", font=("Consolas", 16), bg="#222222", fg="#e8e8e8").pack(pady=20)
 
-    log_frame = ctk.CTkScrollableFrame(window, width=window_width-200, height=400)
+    log_frame = ctk.CTkScrollableFrame(window, width=window_width-150, height=400)
     log_frame.pack(pady=10)
 
     # Define the column headers
-    headers = ["Name", "Quantity", "Total Amount", "Date"] 
+    headers = ["Order ID", "Name", "Quantity", "Total Amount", "Date"] 
 
     # Add headers to the log frame
     for col in range(len(headers)):
@@ -650,6 +674,8 @@ def view_purchase_log():
     back_but.place(x=window_width-200, y=window_height-50)
 
     def clear_items():
+        global order_id
+
         if log_records == [] :
             messagebox.showinfo("Empty", "No records to clear")
         else :
@@ -659,13 +685,20 @@ def view_purchase_log():
                 mydb.commit()
                 view_purchase_log()
                 messagebox.showinfo("Success", "All records have been cleared")
+                order_id = 1
 
     clear_but = tk.Button(
         window, text="Clear", cursor="hand2", bg="#f44336", fg="white", font=("Consolas", 12),
         command=lambda: clear_items(), activebackground="black", activeforeground="#E8E8E8"
     )
     clear_but.pack(pady=10)
-            
+
+
+
+#------- DATABASE WORK -------#
+
+
+
 #Create a new database, if it does not exist
 def createdb():
     """Create the database if it does not exist."""
@@ -690,7 +723,7 @@ def create_order_table():
 #Create a table to log all purchases
 def create_log_table():
     """Create the log table if it does not exist."""
-    mycursor.execute("create table if not exists logtable(Name varchar(50) not null, qty int, Total_Price int, Log_Time datetime)")
+    mycursor.execute("create table if not exists logtable(order_id int, Name varchar(50) not null, qty int, Total_Price int, Log_Time datetime)")
 
 #Add food items to the table to make it accessible
 def insert_food_items(file_path):
@@ -709,7 +742,7 @@ def insert_food_items(file_path):
 # Connect to MySQL
 mydb = conn.connect(host="localhost", user="root", passwd="root")
 if mydb.is_connected():
-    print("Connection has been established!")
+    print(f"Connection with {__name__} has been established!")
 else:
     exit(-1)
 
@@ -722,23 +755,33 @@ create_log_table()
 create_order_table()
 
 # Define the path for food items CSV
-path = r"D:\Annamalai\Programming\Project 12\Restaurant Menu - Food Items.csv"
+path = r"Restaurant Menu - Food Items.csv"
 
 # Insert food items into the database
 insert_food_items(path)
 mycursor.execute("SET GLOBAL sql_mode=''")
 mydb.commit()  # Make changes in MySQL
 
+
+
+#------- INITIALIZATION -------#
+
+
+
 # Initialize main window
 cat_but = {}  # Categories
 item_but = {}  # Food items
 
-money = 0
+money = 0 #Amount to be paid
+
+#Setting order ID
+mycursor.execute("SELECT order_id FROM logtable")
+order_id = max([row[0] for row in mycursor.fetchall()] or [0])+1
 
 show_passwd = False
 
 # Create main window
-window_width = 900
+window_width = 1000
 window_height = 600
 window = tk.Tk()
 window.title("Restaurant Menu")

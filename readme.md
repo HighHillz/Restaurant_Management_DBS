@@ -24,8 +24,5 @@ The project can be useful for restaurants where customer to worker ratio is not 
 ## Updates
 - Order ID: Record the ID to deliver food to the right person!
 
-## Future Enhancements
-Nothing here for now :/
-
 ## Version
 1.1

@@ -4,7 +4,7 @@ A simulation of an online selecting and ordering options at a restaurant. It is 
 
 ## Features
 - Order food from an online driven menu.
-- Access to order details.
+- Access to order details for the admin.
 - Online manipulation of food menu items.
 - Purchase history.
 
@@ -24,7 +24,7 @@ The project can be useful for restaurants where customer to worker ratio is not 
 ## Updates
 - New: Customer login and dashboard
 - New: Customers can view their purchase history
-
+- New: Ability to create new accounts (Removed dummy credentials)
 - New: Ability to navigate back to home page from login page
 - Modification: Buttons are neatly placed
 - Modification: Manage Restaurant is now Menu Management

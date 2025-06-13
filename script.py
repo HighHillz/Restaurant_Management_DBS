@@ -32,21 +32,6 @@ class Database:
 
     def create_account_table(self):
         self.mycursor.execute("create table if not exists accounts(username varchar(30), password varchar(30), type varchar(20))")
-        
-    #Add food items to the table to make it accessible
-    def insert_food_items(self, file_path):
-        """Insert food items into the database from a CSV file."""
-        with open(file_path, 'r') as food_items: #Read items from CSV file
-            item_details = csv.reader(food_items)
-            for row in item_details:
-                try:
-                    self.mycursor.execute(
-                        'INSERT INTO food VALUES (%s, %s, %s, %s, %s)',
-                        (int(row[0]), row[1], row[2], row[3], int(row[4]))
-                    )
-                except ValueError: #Ignore text based values
-                    continue
-            self.mydb.commit()
             
     def create_tables(self):
         self.createtable()

@@ -4,7 +4,7 @@ A simulation of an online selecting and ordering options at a restaurant. It is 
 
 ## Features
 - Order food from an online driven menu.
-- Access to order details for the admin.
+- Access to order details.
 - Online manipulation of food menu items.
 - Purchase history.
 

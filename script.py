@@ -31,7 +31,7 @@ class Database:
         self.mycursor.execute("create table if not exists logtable(username varchar(30), Name varchar(50) not null, qty int, Total_Price int, Log_Time datetime)")
 
     def create_account_table(self):
-        self.mycursor.execute("create table if not exists accounts(username varchar(30), password varchar(30), type varchar(20))")
+        self.mycursor.execute("create table if not exists accounts(username varchar(30), password varchar(30), type varchar(20), phone char(10), email varchar(30), created datetime)")
             
     def create_tables(self):
         self.createtable()
@@ -63,7 +63,7 @@ class Database:
         path = r"Restaurant Menu - Food Items.csv"
         self.insert_food_items(path)
 
-class Accounts(Database):
+class Account(Database):
     def __init__(self, Type):
         super().__init__('Restaurant')
         self.Type = Type
@@ -72,14 +72,49 @@ class Accounts(Database):
         self.mycursor.execute("SELECT username FROM accounts WHERE username = %s AND type = %s", (username, self.Type))
         return bool(self.mycursor.fetchall())
 
-    def create_account(self, username, password):
-        self.mycursor.execute("INSERT INTO accounts VALUES(%s, %s, %s)", (username, password, self.Type))
+    def create_account(self, username, password, phone, email):
+        self.mycursor.execute("INSERT INTO accounts VALUES(%s, %s, %s, %s, %s, NOW())", (username, password, self.Type, phone, email))
         self.mydb.commit()
 
     def verify_login(self, username, password):
         self.mycursor.execute("SELECT password FROM accounts WHERE type = %s AND username = %s", (self.Type, username))
         result = self.mycursor.fetchone()
         return result and result[0] == password
+    
+    def get_customer_details(self):
+        self.mycursor.execute("select username, phone, email, created from accounts where type = 'Customer'")
+        return self.mycursor.fetchall()
+    
+    def get_account_detail(self, username, Type):
+        self.mycursor.execute("select * from accounts where type = %s and username = %s", (Type, username))
+        return self.mycursor.fetchone()
+    
+    def edit_account_detail(self, username, Type, password, phone, email):
+        self.mycursor.execute("update accounts set password = %s where username = %s and type = %s", (password, username, Type))
+        self.mycursor.execute("update accounts set phone = %s where username = %s and type = %s", (phone, username, Type))
+        self.mycursor.execute("update accounts set email = %s where username = %s and type = %s", (email, username, Type))
+        self.mydb.commit()
+    
+    def delete_account(self, username, Type):
+        self.mycursor.execute("delete from accounts where username = %s and type = %s", (username, Type))
+        self.mydb.commit()
+    
+    @staticmethod
+    def is_phone_valid(phone):
+        if len(phone) == 10 and phone.isdigit():
+            return True
+        return False
+    
+    @staticmethod
+    def is_email_valid(email):
+        if email.count('@') == 1:
+            for i in email:
+                if i == '@':
+                    continue
+                if not (i.isalnum() or i == "."):
+                    return False
+            return True
+        return False
 
 class Order(Database):
     def __init__(self, username):
